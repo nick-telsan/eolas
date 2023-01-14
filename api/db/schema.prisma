@@ -1,0 +1,41 @@
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = "native"
+}
+
+model User {
+  id                  Int @id @default(autoincrement())
+  email               String  @unique
+  hashedPassword      String
+  salt                String
+  resetToken          String?
+  resetTokenExpiresAt DateTime?
+  roles String @default("admin")
+
+  comments Comment[]
+}
+
+model Item {
+  id Int @id @default(autoincrement())
+  name String?
+  body String?
+  philosophy String?
+
+  comments Comment[]
+}
+
+model Comment {
+  id String @id @db.Uuid @default(uuid())
+  userId Int
+  itemId Int
+  body String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  item Item @relation(fields: [itemId], references: [id])
+}

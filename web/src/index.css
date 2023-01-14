@@ -1,0 +1,37 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer base {
+  body, html {
+    @apply bg-chocolate
+  }
+  body, html {
+    @apply font-barlow
+  }
+  body, html {
+    @apply text-whip-cream
+  }
+}
+
+body, html {
+  height: 100%;
+  width: 100%;
+}
+
+.editor-paragraph {
+  margin-bottom: 0.5rem;
+}
+
+.editor-placeholder {
+  overflow: hidden;
+  position: absolute;
+  text-overflow: ellipsis;
+  top: 8px;
+  left: 8px;
+  font-size: 1rem;
+  user-select: none;
+  display: inline-block;
+  pointer-events: none;
+  font-style: italic;
+}
