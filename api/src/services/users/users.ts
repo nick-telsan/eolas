@@ -1,5 +1,7 @@
 import type { QueryResolvers, MutationResolvers } from 'types/graphql'
 
+import { hashPassword } from '@redwoodjs/api'
+
 import { db } from 'src/lib/db'
 
 export const users: QueryResolvers['users'] = () => {
@@ -13,8 +15,15 @@ export const user: QueryResolvers['user'] = ({ id }) => {
 }
 
 export const createUser: MutationResolvers['createUser'] = ({ input }) => {
+  const [hashedPassword, salt] = hashPassword(input.password)
+
   return db.user.create({
-    data: input,
+    data: {
+      email: input.email,
+      hashedPassword,
+      salt,
+      roles: input.roles,
+    },
   })
 }
 

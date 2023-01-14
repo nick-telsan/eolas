@@ -51,52 +51,50 @@ const LoginPage = () => {
             eolas
           </h2>
 
-          <div className="rw-form-wrapper">
-            <Form onSubmit={onSubmit} className="rw-form-wrapper">
-              <div className="flex flex-col mb-4">
-                <Label name="email" className="text-lg">
-                  Email
-                </Label>
-                <TextField
-                  name="email"
-                  className="bg-transparent border-matcha border-2 rounded-md focus:border-mint px-2 outline-none text-lg"
-                  errorClassName="rw-input rw-input-error"
-                  ref={emailRef}
-                  validation={{
-                    required: {
-                      value: true,
-                      message: 'Email is required',
-                    },
-                  }}
-                />
+          <Form onSubmit={onSubmit}>
+            <div className="flex flex-col mb-4">
+              <Label name="email" className="text-lg">
+                Email
+              </Label>
+              <TextField
+                name="email"
+                className="bg-transparent border-matcha border-2 rounded-md focus:border-mint px-2 outline-none text-lg"
+                errorClassName="rw-input rw-input-error"
+                ref={emailRef}
+                validation={{
+                  required: {
+                    value: true,
+                    message: 'Email is required',
+                  },
+                }}
+              />
 
-                <FieldError name="email" />
-              </div>
+              <FieldError name="email" />
+            </div>
 
-              <div className="flex flex-col mb-4">
-                <Label name="password" className="text-lg">
-                  Password
-                </Label>
-                <PasswordField
-                  name="password"
-                  className="bg-transparent border-matcha border-2 rounded-md focus:border-mint px-2 outline-none text-lg"
-                  autoComplete="current-password"
-                  validation={{
-                    required: {
-                      value: true,
-                      message: 'Password is required',
-                    },
-                  }}
-                />
+            <div className="flex flex-col mb-4">
+              <Label name="password" className="text-lg">
+                Password
+              </Label>
+              <PasswordField
+                name="password"
+                className="bg-transparent border-matcha border-2 rounded-md focus:border-mint px-2 outline-none text-lg"
+                autoComplete="current-password"
+                validation={{
+                  required: {
+                    value: true,
+                    message: 'Password is required',
+                  },
+                }}
+              />
 
-                <FieldError name="password" />
-              </div>
+              <FieldError name="password" />
+            </div>
 
-              <Submit className="w-full p-1 bg-matcha border-matcha border-2 rounded-md mb-2 text-lg hover:border-mint outline-none focus:border-mint">
-                Login
-              </Submit>
-            </Form>
-          </div>
+            <Submit className="w-full p-1 bg-matcha border-matcha border-2 rounded-md mb-2 text-lg hover:border-mint outline-none focus:border-mint">
+              Login
+            </Submit>
+          </Form>
         </div>
       </main>
     </>

@@ -12,7 +12,7 @@ export const schema = gql`
   type Query {
     comments: [Comment!]! @requireAuth
     comment(id: String!): Comment @requireAuth
-    commentsByItem(itemId: Int!): [Comment] @requireAuth
+    commentsByItem(itemId: Int): [Comment] @requireAuth
   }
 
   input CreateCommentInput {

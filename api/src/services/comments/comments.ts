@@ -19,14 +19,18 @@ export const comment: QueryResolvers['comment'] = ({ id }) => {
 export const commentsByItem: QueryResolvers['commentsByItem'] = ({
   itemId,
 }) => {
-  return db.comment.findMany({
-    where: { itemId },
-    orderBy: [
-      {
-        createdAt: 'desc',
-      },
-    ],
-  })
+  if (itemId) {
+    return db.comment.findMany({
+      where: { itemId },
+      orderBy: [
+        {
+          createdAt: 'desc',
+        },
+      ],
+    })
+  }
+
+  return []
 }
 
 export const createComment: MutationResolvers['createComment'] = ({

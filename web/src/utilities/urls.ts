@@ -26,7 +26,7 @@ export function getSearchParam(params: string, key: string) {
   const parsedParams = getSearchParams(params)
 
   if (!parsedParams) {
-    return null
+    return undefined
   }
 
   return parsedParams.find((param) => param.id === key).value || undefined
