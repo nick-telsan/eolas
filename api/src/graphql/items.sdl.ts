@@ -12,6 +12,7 @@ export const schema = gql`
   type Query {
     items: [Item!]! @requireAuth
     item(id: Int): Item @requireAuth
+    itemsByName(name: String!): [Item] @requireAuth
   }
 
   input ItemInput {
