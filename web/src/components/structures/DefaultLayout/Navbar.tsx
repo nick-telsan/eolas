@@ -1,15 +1,18 @@
+import { useAuth } from '@redwoodjs/auth'
 import { routes } from '@redwoodjs/router'
 
-import ItemsCell from 'src/components/cells/ItemsCell'
 import { Link } from 'src/components/ui/Link'
 
 export const Navbar = () => {
+  const { hasRole } = useAuth()
+  const admin = hasRole('admin')
+
   return (
     <nav className="min-w-[100px] w-full max-w-[200px] h-full bg-matcha border-r border-r-mint/20 flex flex-col items-center">
-      <div className="border-b border-b-mint w-full text-center mb-1 p-2">
-        <Link to={routes.view()}>Create</Link>
-      </div>
-      <ItemsCell />
+      <Link to={routes.index()}>Index</Link>
+      <Link to={routes.view()}>Create</Link>
+      <Link to={routes.compare()}>Compare</Link>
+      {admin && <Link to={routes.admin()}>Admin</Link>}
     </nav>
   )
 }
