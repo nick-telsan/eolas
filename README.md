@@ -9,6 +9,10 @@
 
 ## Installation
 1. `yarn install`
+2. `docker compose up` <- start Postgres
+
+## Local Development
+
 
 Start by installing dependencies:
 
