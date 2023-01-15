@@ -4,6 +4,9 @@ export const schema = gql`
     name: String
     body: String
     philosophy: String
+    parentId: Int
+    parent: Item
+    children: [Item]
   }
 
   type Query {
@@ -16,6 +19,7 @@ export const schema = gql`
     name: String
     body: String
     philosophy: String
+    parentId: Int
   }
 
   input CreateOrUpdateItemInput {
@@ -23,6 +27,7 @@ export const schema = gql`
     name: String
     body: String
     philosophy: String
+    parentId: Int
   }
 
   type Mutation {

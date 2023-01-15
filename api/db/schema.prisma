@@ -26,6 +26,10 @@ model Item {
   body String?
   philosophy String?
 
+  parentId Int?
+  parent Item? @relation("ParentChild", fields: [parentId], references: [id])
+  children Item[] @relation("ParentChild")
+
   comments Comment[]
 }
 
