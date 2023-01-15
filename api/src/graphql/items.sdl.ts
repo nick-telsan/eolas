@@ -4,11 +4,15 @@ export const schema = gql`
     name: String
     body: String
     philosophy: String
+    parentId: Int
+    parent: Item
+    children: [Item]
   }
 
   type Query {
     items: [Item!]! @requireAuth
     item(id: Int): Item @requireAuth
+    itemsByName(name: String!): [Item] @requireAuth
   }
 
   input ItemInput {
@@ -16,6 +20,7 @@ export const schema = gql`
     name: String
     body: String
     philosophy: String
+    parentId: Int
   }
 
   input CreateOrUpdateItemInput {
@@ -23,6 +28,7 @@ export const schema = gql`
     name: String
     body: String
     philosophy: String
+    parentId: Int
   }
 
   type Mutation {

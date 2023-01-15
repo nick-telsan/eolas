@@ -6,20 +6,25 @@ import {
 } from 'types/graphql'
 
 import { useAuth } from '@redwoodjs/auth'
+import { navigate, routes, useLocation } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 
 import { QUERY as ITEM_QUERY } from 'src/components/cells/ItemsCell'
 import { EditorBlock } from 'src/components/ui/EditorBlock'
 import { TextInput } from 'src/components/ui/TextInput'
 import { useItemStore } from 'src/utilities/item-store'
+import { getSearchParam } from 'src/utilities/urls'
 
 import { CREATE_OR_UPDATE_ITEM } from './graphql'
+import { ParentSelect } from './ParentSelect'
 
 type ViewStructureProps = {
   id?: number
   name?: string
   body?: string
   philosophy?: string
+  parentId?: number
+  parentName?: string
 }
 
 let filterTimeout: NodeJS.Timeout
@@ -29,8 +34,12 @@ export const ViewStructure = ({
   name,
   body,
   philosophy,
+  parentId,
+  parentName,
 }: ViewStructureProps) => {
+  const { search } = useLocation()
   const { hasRole } = useAuth()
+  const searchId = getSearchParam(search, 'id')
   const readOnly = hasRole('admin')
 
   const internalId = useItemStore((state) => state.id)
@@ -39,6 +48,7 @@ export const ViewStructure = ({
   const [internalName, setName] = useState<string>(name)
   const [internalBody, setBody] = useState<string>(body)
   const [internalPhilosophy, setPhilosophy] = useState<string>(philosophy)
+  const [internalParentId, setParentId] = useState<number | undefined>(parentId)
 
   const [createOrUpdateItem] = useMutation<
     CreateOrUpdateItemMutation,
@@ -67,6 +77,7 @@ export const ViewStructure = ({
             name: internalName,
             body: internalBody,
             philosophy: internalPhilosophy,
+            parentId: internalParentId,
           },
         },
       })
@@ -76,6 +87,7 @@ export const ViewStructure = ({
     internalName,
     internalBody,
     internalPhilosophy,
+    internalParentId,
     createOrUpdateItem,
   ])
 
@@ -89,6 +101,19 @@ export const ViewStructure = ({
 
   const handlePhilosophyChange = (state: string) => {
     setPhilosophy(state)
+  }
+
+  const handleParentChange = (value: number) => {
+    setParentId(value)
+  }
+
+  const resetScreen = () => {
+    setInternalId(undefined)
+    if (searchId) {
+      navigate(routes.view())
+    } else {
+      window.location.reload()
+    }
   }
 
   return (
@@ -108,12 +133,23 @@ export const ViewStructure = ({
           readOnly={readOnly}
         />
       </div>
-      <EditorBlock
-        namespace="item-philosophy"
-        callback={handlePhilosophyChange}
-        state={internalPhilosophy}
-        readOnly={readOnly}
-      />
+
+      <div className="mb-2 flex justify-end">
+        <ParentSelect defaultName={parentName} callback={handleParentChange} />
+      </div>
+
+      <div className="mb-2">
+        <EditorBlock
+          namespace="item-philosophy"
+          callback={handlePhilosophyChange}
+          state={internalPhilosophy}
+          readOnly={readOnly}
+        />
+      </div>
+
+      <div className="flex justify-end w-full">
+        <button onClick={resetScreen}>Reset</button>
+      </div>
     </>
   )
 }

@@ -24,10 +24,10 @@ export const Failure = ({ error }: CellFailureProps) => (
 
 export const Success = ({ items }: CellSuccessProps<ItemsQuery>) => {
   return (
-    <ul className="text-center">
+    <ul className="text-center grid grid-cols-8">
       {items.map((item) => {
         return (
-          <li key={item.id} className="mb-2 px-2">
+          <li key={item.id} className="mb-2 px-2 col-span-1">
             <Link to={`${routes.view()}?id=${item.id}`}>
               {item.name || 'Unnamed Item'}
             </Link>
