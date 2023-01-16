@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import {
   CreateOrUpdateItemMutation,
@@ -6,15 +6,12 @@ import {
 } from 'types/graphql'
 
 import { useAuth } from '@redwoodjs/auth'
-import { navigate, routes, useLocation } from '@redwoodjs/router'
+import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 
-import { QUERY as ITEM_QUERY } from 'src/components/cells/ItemsCell'
 import { EditorBlock } from 'src/components/ui/EditorBlock'
 import { TextInput } from 'src/components/ui/TextInput'
-import { useItemStore } from 'src/utilities/item-store'
-import { getSearchParam } from 'src/utilities/urls'
 
 import { CREATE_OR_UPDATE_ITEM } from './graphql'
 import { ParentSelect } from './ParentSelect'
@@ -25,10 +22,8 @@ type ViewStructureProps = {
   body?: string
   philosophy?: string
   parentId?: number
-  parentName: string
+  parentName?: string
 }
-
-let filterTimeout: NodeJS.Timeout
 
 export const ViewStructure = ({
   id,
@@ -38,13 +33,8 @@ export const ViewStructure = ({
   parentId,
   parentName,
 }: ViewStructureProps) => {
-  const { search } = useLocation()
   const { hasRole } = useAuth()
-  const searchId = getSearchParam(search, 'id')
   const readOnly = hasRole('admin')
-
-  const internalId = useItemStore((state) => state.id)
-  const setInternalId = useItemStore((state) => state.setId)
 
   const [internalName, setName] = useState<string>(name)
   const [internalBody, setBody] = useState<string>(body)
@@ -57,7 +47,9 @@ export const ViewStructure = ({
     CreateOrUpdateItemMutationVariables
   >(CREATE_OR_UPDATE_ITEM, {
     onCompleted: (result) => {
-      setInternalId(result.createOrUpdateItem.id)
+      if (!id) {
+        navigate(`${routes.view()}?id=${result.createOrUpdateItem.id}`)
+      }
     },
     onError: (error) => {
       toast.error(error.message)
@@ -67,39 +59,7 @@ export const ViewStructure = ({
         setParentName('')
       }
     },
-    refetchQueries: [{ query: ITEM_QUERY }],
   })
-
-  useEffect(() => {
-    if (id) {
-      setInternalId(id)
-    }
-  }, [id, setInternalId])
-
-  useEffect(() => {
-    clearTimeout(filterTimeout)
-
-    filterTimeout = setTimeout(() => {
-      createOrUpdateItem({
-        variables: {
-          input: {
-            id: internalId,
-            name: internalName,
-            body: internalBody,
-            philosophy: internalPhilosophy,
-            parentId: internalParentId,
-          },
-        },
-      })
-    }, 1000)
-  }, [
-    internalId,
-    internalName,
-    internalBody,
-    internalPhilosophy,
-    internalParentId,
-    createOrUpdateItem,
-  ])
 
   const handleNameChange = (value: string) => {
     setName(value)
@@ -117,13 +77,18 @@ export const ViewStructure = ({
     setParentId(value)
   }
 
-  const resetScreen = () => {
-    setInternalId(undefined)
-    if (searchId) {
-      navigate(routes.view())
-    } else {
-      window.location.reload()
-    }
+  const handleSave = () => {
+    createOrUpdateItem({
+      variables: {
+        input: {
+          id: id,
+          name: internalName,
+          body: internalBody,
+          philosophy: internalPhilosophy,
+          parentId: internalParentId,
+        },
+      },
+    })
   }
 
   return (
@@ -163,7 +128,7 @@ export const ViewStructure = ({
       </div>
 
       <div className="flex w-full justify-end">
-        <button onClick={resetScreen}>Reset</button>
+        <button onClick={handleSave}>Save</button>
       </div>
     </>
   )

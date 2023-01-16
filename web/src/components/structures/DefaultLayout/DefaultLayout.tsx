@@ -24,7 +24,7 @@ export const DefaultLayout = ({ children }: DefaultLayoutProps) => {
             Index
           </Link>
 
-          <Link className="font-overlock" to={routes.view()}>
+          <Link className="font-overlock" to={routes.create()}>
             Create
           </Link>
 

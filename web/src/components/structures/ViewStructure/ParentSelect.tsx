@@ -18,7 +18,7 @@ export const ITEMS_BY_NAME_QUERY = gql`
 `
 
 export const ParentSelect = ({
-  name,
+  name = '',
   callback,
   setParent,
 }: ParentSelectType) => {
@@ -69,7 +69,7 @@ export const ParentSelect = ({
               ))}
               <button
                 className="text-left text-lg"
-                onClick={() => handleSelect('', undefined)}
+                onClick={() => handleSelect(name, undefined)}
               >
                 Close
               </button>
