@@ -11,8 +11,8 @@ const Routes = () => {
             <Route path="/admin" page={AdminPage} name="admin" />
           </Private>
           <Route path="/create" page={CreatePage} name="create" />
-          <Route path="/compare" page={ComparePage} name="compare" />
-          <Route path="/view" page={ViewPage} name="view" />
+          <Route path="/compare/{ids}" page={ComparePage} name="compare" />
+          <Route path="/view/{id}" page={ViewPage} name="view" />
           <Route path="/index" page={IndexPage} name="index" />
         </Set>
       </Private>

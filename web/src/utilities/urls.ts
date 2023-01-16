@@ -18,7 +18,6 @@ export function getSearchParams(params: string) {
       value: parts[1],
     })
   })
-
   return items
 }
 

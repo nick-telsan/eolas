@@ -28,10 +28,6 @@ export const DefaultLayout = ({ children }: DefaultLayoutProps) => {
             Create
           </Link>
 
-          <Link className="font-overlock" to={routes.compare()}>
-            Compare
-          </Link>
-
           {admin && (
             <Link className="font-overlock" to={routes.admin()}>
               Admin
