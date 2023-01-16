@@ -34,7 +34,7 @@ export const DefaultLayout = ({ children }: DefaultLayoutProps) => {
 
           {admin && (
             <Link className="font-overlock" to={routes.admin()}>
-              Compare
+              Admin
             </Link>
           )}
           <button className="font-overlock" onClick={logOut}>

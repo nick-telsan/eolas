@@ -36,34 +36,31 @@ export const Failure = ({ error }: CellFailureProps) => (
 
 export const Success = ({ items }: CellSuccessProps<ItemsQuery>) => {
   return (
-    <ul className="grid grid-cols-8">
+    <ul className="grid list-none grid-cols-4">
       {items.map((item) => {
         return (
           <li key={item.id} className="col-span-1 px-2">
             <Link to={`${routes.view()}?id=${item.id}`}>
               {item.name || 'Unnamed Item'}
             </Link>
-            <ul className="ml-4">
+            <ul className="ml-4 list-none">
               {item.children.map((child) => {
                 return (
-                  <li key={child.id} className="col-span-1 px-2">
+                  <li key={child.id} className="px-2">
                     <Link to={`${routes.view()}?id=${child.id}`}>
                       {child.name || 'Unnamed Item'}
                     </Link>
-                    <ul className="ml-4">
+                    <ul className="ml-4 list-none">
                       {child.children.map((grandchild) => {
                         return (
-                          <li key={grandchild.id} className="col-span-1 px-2">
+                          <li key={grandchild.id} className="px-2">
                             <Link to={`${routes.view()}?id=${grandchild.id}`}>
                               {grandchild.name || 'Unnamed Item'}
                             </Link>
-                            <ul className="ml-4">
+                            <ul className="ml-4 list-none">
                               {grandchild.children.map((greatgrandchild) => {
                                 return (
-                                  <li
-                                    key={greatgrandchild.id}
-                                    className="col-span-1 px-2"
-                                  >
+                                  <li key={greatgrandchild.id} className="px-2">
                                     <Link
                                       to={`${routes.view()}?id=${
                                         greatgrandchild.id

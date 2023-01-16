@@ -7,7 +7,7 @@ const CreatePage = () => {
         <ViewStructure />
       </div>
       <div className="col-span-2">
-        <h3>Comments enabled after creating your initial object.</h3>
+        <h3>Comments enabled after creating your item.</h3>
       </div>
     </div>
   )
