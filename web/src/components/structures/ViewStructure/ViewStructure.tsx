@@ -53,7 +53,7 @@ export const ViewStructure = ({
   >(CREATE_OR_UPDATE_ITEM, {
     onCompleted: (result) => {
       if (!id) {
-        navigate(`${routes.view()}?id=${result.createOrUpdateItem.id}`)
+        navigate(routes.view({ id: result.createOrUpdateItem.id }))
       } else {
         toast.success('Saved')
       }
