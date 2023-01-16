@@ -65,6 +65,13 @@ export const Success = ({ items }: CellSuccessProps<ItemsQuery>) => {
         {items.map((item) => {
           return (
             <li key={item.id} className="col-span-1 px-2">
+              <input
+                className="mr-2"
+                type="checkbox"
+                value={item.id}
+                onChange={() => handleChange(item.id)}
+                checked={selected.includes(item.id)}
+              />
               <Link to={routes.view({ id: item.id })}>
                 {item.name || 'Unnamed Item'}
               </Link>
@@ -72,6 +79,13 @@ export const Success = ({ items }: CellSuccessProps<ItemsQuery>) => {
                 {item.children.map((child) => {
                   return (
                     <li key={child.id} className="px-2">
+                      <input
+                        className="mr-2"
+                        type="checkbox"
+                        value={child.id}
+                        onChange={() => handleChange(child.id)}
+                        checked={selected.includes(child.id)}
+                      />
                       <Link to={routes.view({ id: child.id })}>
                         {child.name || 'Unnamed Item'}
                       </Link>
@@ -96,6 +110,17 @@ export const Success = ({ items }: CellSuccessProps<ItemsQuery>) => {
                                       key={greatgrandchild.id}
                                       className="px-2"
                                     >
+                                      <input
+                                        className="mr-2"
+                                        type="checkbox"
+                                        value={greatgrandchild.id}
+                                        onChange={() =>
+                                          handleChange(greatgrandchild.id)
+                                        }
+                                        checked={selected.includes(
+                                          greatgrandchild.id
+                                        )}
+                                      />
                                       <Link
                                         to={routes.view({
                                           id: greatgrandchild.id,
