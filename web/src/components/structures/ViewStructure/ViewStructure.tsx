@@ -103,6 +103,7 @@ export const ViewStructure = ({
           body: internalBody,
           philosophy: internalPhilosophy,
           parentId: internalParentId,
+          position: internalPosition as number,
         },
       },
     })
