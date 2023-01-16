@@ -1,10 +1,12 @@
+import { useParams } from '@redwoodjs/router'
+
+import CompareCell from 'src/components/cells/CompareCell'
+
 const ComparePage = () => {
-  return (
-    <>
-      <h1>Compare</h1>
-      <p>One day, you will be able to compare multiple items on this screen.</p>
-    </>
-  )
+  const { ids } = useParams()
+  const items = ids.split(',').map((id) => parseInt(id))
+
+  return <CompareCell items={items} />
 }
 
 export default ComparePage

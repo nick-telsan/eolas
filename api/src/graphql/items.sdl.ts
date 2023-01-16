@@ -15,6 +15,7 @@ export const schema = gql`
     item(id: Int): Item @requireAuth
     itemsByName(name: String!, id: Int): [Item] @requireAuth
     itemsSearch(search: String!): [Item] @requireAuth
+    compareItems(items: [Int!]): [Item] @requireAuth
   }
 
   input ItemInput {

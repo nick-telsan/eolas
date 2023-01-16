@@ -114,6 +114,10 @@ export const itemsByName: QueryResolvers['itemsByName'] = ({ name, id }) => {
   })
 }
 
+export const compareItems: QueryResolvers['compareItems'] = ({ items }) => {
+  return db.item.findMany({ where: { id: { in: items } } })
+}
+
 export const createItem: MutationResolvers['createItem'] = ({ input }) => {
   return db.item.create({
     data: input,

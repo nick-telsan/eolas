@@ -41,6 +41,7 @@ type EditorBlockProps = {
   callback: CallbackType
   readOnly?: boolean
   type: string
+  id?: number
 }
 
 export const EditorBlock = ({
@@ -49,6 +50,7 @@ export const EditorBlock = ({
   callback,
   readOnly = false,
   type,
+  id,
 }: EditorBlockProps) => {
   const initialConfig = {
     namespace,
@@ -60,7 +62,7 @@ export const EditorBlock = ({
   return (
     <LexicalComposer initialConfig={initialConfig}>
       <div className="min-h-[200px] w-full rounded-md border-2 border-matcha focus-within:border-mint">
-        {!readOnly && <ToolbarPlugin name={type} />}
+        <ToolbarPlugin name={type} readOnly={readOnly} id={id} />
         <div className="relative p-2">
           <RichTextPlugin
             contentEditable={

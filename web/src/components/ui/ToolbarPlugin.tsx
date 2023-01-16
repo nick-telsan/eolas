@@ -9,11 +9,17 @@ import {
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
 import { FORMAT_TEXT_COMMAND } from 'lexical'
 
+import { routes } from '@redwoodjs/router'
+
+import { Link } from './Link'
+
 type ToolbarPluginType = {
   name: string
+  readOnly: boolean
+  id?: number
 }
 
-export const ToolbarPlugin = ({ name }: ToolbarPluginType) => {
+export const ToolbarPlugin = ({ name, readOnly, id }: ToolbarPluginType) => {
   const [editor] = useLexicalComposerContext()
   const [blockType, setBlockType] = useState('paragraph')
 
@@ -52,24 +58,27 @@ export const ToolbarPlugin = ({ name }: ToolbarPluginType) => {
   return (
     <div className="flex w-full justify-between bg-matcha px-2">
       <h3>{name}</h3>
-      <div className="flex w-full justify-end gap-4">
-        <button className="font-bold" onClick={formatBold}>
-          Bold
-        </button>
-        <button className="italic" onClick={formatItalics}>
-          Italic
-        </button>
-        <button className="pl-4" onClick={formatBulletList}>
-          <ul>
-            <li className="list-disc">Bullets</li>
-          </ul>
-        </button>
-        <button className="pl-4" onClick={formatOrderedList}>
-          <ol>
-            <li className="list-decimal">Numbers</li>
-          </ol>
-        </button>
-      </div>
+      {!readOnly && (
+        <div className="flex w-full justify-end gap-4">
+          <button className="font-bold" onClick={formatBold}>
+            Bold
+          </button>
+          <button className="italic" onClick={formatItalics}>
+            Italic
+          </button>
+          <button className="pl-4" onClick={formatBulletList}>
+            <ul>
+              <li className="list-disc">Bullets</li>
+            </ul>
+          </button>
+          <button className="pl-4" onClick={formatOrderedList}>
+            <ol>
+              <li className="list-decimal">Numbers</li>
+            </ol>
+          </button>
+        </div>
+      )}
+      {id && <Link to={routes.view({ id })}>View</Link>}
     </div>
   )
 }
