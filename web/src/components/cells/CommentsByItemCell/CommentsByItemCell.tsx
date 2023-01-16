@@ -2,8 +2,6 @@ import type { CommentsByItemQuery } from 'types/graphql'
 
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
-import { CommentsStructure } from 'src/components/structures/CommentsStructure/CommentsStructure'
-
 export const QUERY = gql`
   query CommentsByItemQuery($itemId: Int) {
     commentsByItem(itemId: $itemId) {
@@ -25,5 +23,23 @@ export const Failure = ({ error }: CellFailureProps) => (
 export const Success = ({
   commentsByItem,
 }: CellSuccessProps<CommentsByItemQuery>) => {
-  return <CommentsStructure comments={commentsByItem} />
+  return (
+    <>
+      {commentsByItem.map((comment) => {
+        return (
+          <div
+            className="my-2 w-full rounded-md border-2 border-matcha"
+            key={comment.id}
+          >
+            <div className="p-2">
+              <p>{comment.body}</p>
+            </div>
+            <div className="bg-matcha px-2">
+              <p>{comment.user.email}</p>
+            </div>
+          </div>
+        )
+      })}
+    </>
+  )
 }

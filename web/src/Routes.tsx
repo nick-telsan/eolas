@@ -10,6 +10,7 @@ const Routes = () => {
           <Private unauthenticated="home" roles="admin">
             <Route path="/admin" page={AdminPage} name="admin" />
           </Private>
+          <Route path="/create" page={CreatePage} name="create" />
           <Route path="/compare" page={ComparePage} name="compare" />
           <Route path="/view" page={ViewPage} name="view" />
           <Route path="/index" page={IndexPage} name="index" />

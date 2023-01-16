@@ -45,13 +45,13 @@ export const EditorBlock = ({
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
-      <div className="border-2 border-matcha rounded-md p-2 w-full min-h-[200px] relative focus-within:border-mint">
+      <div className="relative min-h-[200px] w-full rounded-md border-2 border-matcha p-2 focus-within:border-mint">
         <RichTextPlugin
           contentEditable={
             <ContentEditable
               spellCheck
               readOnly={readOnly}
-              className="outline-none relative"
+              className="relative outline-none"
             />
           }
           placeholder={

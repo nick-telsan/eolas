@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import {
   CreateOrUpdateItemMutation,
@@ -6,14 +6,12 @@ import {
 } from 'types/graphql'
 
 import { useAuth } from '@redwoodjs/auth'
-import { navigate, routes, useLocation } from '@redwoodjs/router'
+import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+import { toast, Toaster } from '@redwoodjs/web/toast'
 
-import { QUERY as ITEM_QUERY } from 'src/components/cells/ItemsCell'
 import { EditorBlock } from 'src/components/ui/EditorBlock'
 import { TextInput } from 'src/components/ui/TextInput'
-import { useItemStore } from 'src/utilities/item-store'
-import { getSearchParam } from 'src/utilities/urls'
 
 import { CREATE_OR_UPDATE_ITEM } from './graphql'
 import { ParentSelect } from './ParentSelect'
@@ -27,8 +25,6 @@ type ViewStructureProps = {
   parentName?: string
 }
 
-let filterTimeout: NodeJS.Timeout
-
 export const ViewStructure = ({
   id,
   name,
@@ -37,59 +33,33 @@ export const ViewStructure = ({
   parentId,
   parentName,
 }: ViewStructureProps) => {
-  const { search } = useLocation()
   const { hasRole } = useAuth()
-  const searchId = getSearchParam(search, 'id')
   const readOnly = hasRole('admin')
-
-  const internalId = useItemStore((state) => state.id)
-  const setInternalId = useItemStore((state) => state.setId)
 
   const [internalName, setName] = useState<string>(name)
   const [internalBody, setBody] = useState<string>(body)
   const [internalPhilosophy, setPhilosophy] = useState<string>(philosophy)
   const [internalParentId, setParentId] = useState<number | undefined>(parentId)
+  const [internalParentName, setParentName] = useState<string>(parentName)
 
   const [createOrUpdateItem] = useMutation<
     CreateOrUpdateItemMutation,
     CreateOrUpdateItemMutationVariables
   >(CREATE_OR_UPDATE_ITEM, {
     onCompleted: (result) => {
-      setInternalId(result.createOrUpdateItem.id)
+      if (!id) {
+        navigate(`${routes.view()}?id=${result.createOrUpdateItem.id}`)
+      }
     },
-    refetchQueries: [{ query: ITEM_QUERY }],
+    onError: (error) => {
+      toast.error(error.message)
+
+      if (error.message === 'Child cannot be more than 4 levels deep.') {
+        setParentId(undefined)
+        setParentName('')
+      }
+    },
   })
-
-  useEffect(() => {
-    if (id) {
-      setInternalId(id)
-    }
-  }, [id, setInternalId])
-
-  useEffect(() => {
-    clearTimeout(filterTimeout)
-
-    filterTimeout = setTimeout(() => {
-      createOrUpdateItem({
-        variables: {
-          input: {
-            id: internalId,
-            name: internalName,
-            body: internalBody,
-            philosophy: internalPhilosophy,
-            parentId: internalParentId,
-          },
-        },
-      })
-    }, 1000)
-  }, [
-    internalId,
-    internalName,
-    internalBody,
-    internalPhilosophy,
-    internalParentId,
-    createOrUpdateItem,
-  ])
 
   const handleNameChange = (value: string) => {
     setName(value)
@@ -107,17 +77,23 @@ export const ViewStructure = ({
     setParentId(value)
   }
 
-  const resetScreen = () => {
-    setInternalId(undefined)
-    if (searchId) {
-      navigate(routes.view())
-    } else {
-      window.location.reload()
-    }
+  const handleSave = () => {
+    createOrUpdateItem({
+      variables: {
+        input: {
+          id: id,
+          name: internalName,
+          body: internalBody,
+          philosophy: internalPhilosophy,
+          parentId: internalParentId,
+        },
+      },
+    })
   }
 
   return (
     <>
+      <Toaster />
       <div className="mb-2">
         <TextInput
           value={internalName}
@@ -135,7 +111,11 @@ export const ViewStructure = ({
       </div>
 
       <div className="mb-2 flex justify-end">
-        <ParentSelect defaultName={parentName} callback={handleParentChange} />
+        <ParentSelect
+          name={internalParentName}
+          setParent={setParentName}
+          callback={handleParentChange}
+        />
       </div>
 
       <div className="mb-2">
@@ -147,8 +127,8 @@ export const ViewStructure = ({
         />
       </div>
 
-      <div className="flex justify-end w-full">
-        <button onClick={resetScreen}>Reset</button>
+      <div className="flex w-full justify-end">
+        <button onClick={handleSave}>Save</button>
       </div>
     </>
   )
