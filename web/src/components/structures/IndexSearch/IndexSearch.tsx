@@ -51,7 +51,7 @@ export const IndexSearch = () => {
               {data.itemsSearch.map((item) => {
                 return (
                   <li key={item.id} className="col-span-1 px-2">
-                    <Link to={`${routes.view()}?id=${item.id}`}>
+                    <Link to={routes.view({ id: item.id })}>
                       {item.name || 'Unnamed Item'}
                     </Link>
                   </li>
