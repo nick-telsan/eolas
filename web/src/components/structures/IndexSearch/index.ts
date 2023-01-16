@@ -1,0 +1,1 @@
+export { IndexSearch } from './IndexSearch'

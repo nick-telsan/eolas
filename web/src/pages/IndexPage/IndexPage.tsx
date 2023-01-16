@@ -1,11 +1,7 @@
-import ItemsCell from 'src/components/cells/ItemsCell'
+import { IndexSearch } from 'src/components/structures/IndexSearch'
 
 const IndexPage = () => {
-  return (
-    <>
-      <ItemsCell />
-    </>
-  )
+  return <IndexSearch />
 }
 
 export default IndexPage

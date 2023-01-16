@@ -32,6 +32,9 @@ async function canAddParent(id: number | undefined) {
 
 export const items: QueryResolvers['items'] = () => {
   return db.item.findMany({
+    where: {
+      parentId: null,
+    },
     orderBy: {
       position: 'asc',
     },
@@ -55,6 +58,32 @@ export const items: QueryResolvers['items'] = () => {
           },
         },
       },
+    },
+  })
+}
+
+export const itemsSearch: QueryResolvers['itemsSearch'] = async ({
+  search,
+}) => {
+  return db.item.findMany({
+    where: {
+      OR: [
+        {
+          name: {
+            contains: search,
+          },
+        },
+        {
+          body: {
+            contains: search,
+          },
+        },
+        {
+          philosophy: {
+            contains: search,
+          },
+        },
+      ],
     },
   })
 }
