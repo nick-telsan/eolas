@@ -36,7 +36,7 @@ export const ViewStructure = ({
   position,
 }: ViewStructureProps) => {
   const { hasRole } = useAuth()
-  const readOnly = hasRole('admin')
+  const readOnly = !hasRole('admin')
 
   const [internalName, setName] = useState<string>(name)
   const [internalBody, setBody] = useState<string>(body)
@@ -116,6 +116,7 @@ export const ViewStructure = ({
           value={internalName}
           callback={handleNameChange}
           placeholder="Name"
+          disabled={readOnly}
         />
       </div>
       <div className="mb-2">
@@ -134,12 +135,14 @@ export const ViewStructure = ({
           placeholder="Position"
           onChange={(event) => handlePositionChange(event.target.value)}
           value={internalPosition}
+          disabled={readOnly}
         />
         <ParentSelect
           id={id}
           name={internalParentName}
           setParent={setParentName}
           callback={handleParentChange}
+          disabled={readOnly}
         />
       </div>
 
@@ -154,7 +157,9 @@ export const ViewStructure = ({
       </div>
 
       <div className="flex w-full justify-end">
-        <button onClick={handleSave}>Save</button>
+        <button disabled={readOnly} onClick={handleSave}>
+          Save
+        </button>
       </div>
     </>
   )

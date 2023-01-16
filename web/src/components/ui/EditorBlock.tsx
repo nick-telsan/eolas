@@ -60,7 +60,7 @@ export const EditorBlock = ({
   return (
     <LexicalComposer initialConfig={initialConfig}>
       <div className="min-h-[200px] w-full rounded-md border-2 border-matcha focus-within:border-mint">
-        <ToolbarPlugin name={type} />
+        {!readOnly && <ToolbarPlugin name={type} />}
         <div className="relative p-2">
           <RichTextPlugin
             contentEditable={

@@ -4,6 +4,7 @@ type TextInputProps = {
   value: string
   callback: (input: string) => void
   placeholder: string
+  disabled?: boolean
 }
 
 function onChange(value: string, callback: CallbackType) {
@@ -14,6 +15,7 @@ export const TextInput = ({
   value = '',
   callback,
   placeholder,
+  disabled = false,
 }: TextInputProps) => {
   return (
     <input
@@ -21,6 +23,7 @@ export const TextInput = ({
       value={value}
       onChange={(event) => onChange(event.target.value, callback)}
       placeholder={placeholder}
+      disabled={disabled}
     />
   )
 }
