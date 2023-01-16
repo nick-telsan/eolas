@@ -50,7 +50,7 @@ export const IndexSearch = () => {
             <ul className="grid grid-cols-8">
               {data.itemsSearch.map((item) => {
                 return (
-                  <li key={item.id} className="col-span-1 px-2">
+                  <li key={item.id} className="col-span-1 list-none px-2">
                     <Link to={routes.view({ id: item.id })}>
                       {item.name || 'Unnamed Item'}
                     </Link>
