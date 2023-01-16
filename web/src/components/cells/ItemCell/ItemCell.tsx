@@ -15,6 +15,7 @@ export const QUERY = gql`
       parent {
         name
       }
+      position
     }
   }
 `
@@ -49,6 +50,7 @@ export const Success = ({
       philosophy={item.philosophy || ''}
       parentId={item.parentId}
       parentName={item.parent?.name}
+      position={item.position}
     />
   )
 }

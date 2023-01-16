@@ -23,6 +23,7 @@ type ViewStructureProps = {
   philosophy?: string
   parentId?: number
   parentName?: string
+  position?: number
 }
 
 export const ViewStructure = ({
@@ -32,6 +33,7 @@ export const ViewStructure = ({
   philosophy,
   parentId,
   parentName,
+  position,
 }: ViewStructureProps) => {
   const { hasRole } = useAuth()
   const readOnly = hasRole('admin')
@@ -41,6 +43,9 @@ export const ViewStructure = ({
   const [internalPhilosophy, setPhilosophy] = useState<string>(philosophy)
   const [internalParentId, setParentId] = useState<number | undefined>(parentId)
   const [internalParentName, setParentName] = useState<string>(parentName)
+  const [internalPosition, setPosition] = useState<string | number>(
+    position || ''
+  )
 
   const [createOrUpdateItem] = useMutation<
     CreateOrUpdateItemMutation,
@@ -49,6 +54,8 @@ export const ViewStructure = ({
     onCompleted: (result) => {
       if (!id) {
         navigate(`${routes.view()}?id=${result.createOrUpdateItem.id}`)
+      } else {
+        toast.success('Saved')
       }
     },
     onError: (error) => {
@@ -75,6 +82,16 @@ export const ViewStructure = ({
 
   const handleParentChange = (value: number) => {
     setParentId(value)
+  }
+
+  const handlePositionChange = (value: string) => {
+    const parsedValue = parseInt(value)
+
+    if (parsedValue && parsedValue > 0) {
+      setPosition(parsedValue)
+    } else {
+      toast.error('Position must be a number and greater than 0')
+    }
   }
 
   const handleSave = () => {
@@ -107,11 +124,19 @@ export const ViewStructure = ({
           callback={handleBodyChange}
           state={internalBody}
           readOnly={readOnly}
+          type="Body"
         />
       </div>
 
-      <div className="mb-2 flex justify-end">
+      <div className="mb-2 flex justify-between">
+        <input
+          className="rounded-md border-2 border-matcha bg-transparent px-2 text-lg text-whip-cream outline-none placeholder:italic placeholder:text-whip-cream focus:border-mint"
+          placeholder="Position"
+          onChange={(event) => handlePositionChange(event.target.value)}
+          value={internalPosition}
+        />
         <ParentSelect
+          id={id}
           name={internalParentName}
           setParent={setParentName}
           callback={handleParentChange}
@@ -124,6 +149,7 @@ export const ViewStructure = ({
           callback={handlePhilosophyChange}
           state={internalPhilosophy}
           readOnly={readOnly}
+          type="Philosophy"
         />
       </div>
 

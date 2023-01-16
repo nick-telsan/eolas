@@ -101,11 +101,14 @@ export const item: QueryResolvers['item'] = ({ id }) => {
   return
 }
 
-export const itemsByName: QueryResolvers['itemsByName'] = ({ name }) => {
+export const itemsByName: QueryResolvers['itemsByName'] = ({ name, id }) => {
   return db.item.findMany({
     where: {
       name: {
         contains: name,
+      },
+      id: {
+        not: id,
       },
     },
   })
