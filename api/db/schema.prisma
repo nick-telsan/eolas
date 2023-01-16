@@ -30,6 +30,7 @@ model Item {
   parentId Int?
   parent Item? @relation("ParentChild", fields: [parentId], references: [id])
   children Item[] @relation("ParentChild")
+  position Int @default(0)
 
   comments Comment[]
 }

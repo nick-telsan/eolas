@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react'
 import { useLazyQuery } from '@apollo/client'
 
 type ParentSelectType = {
-  defaultName?: string
+  name: string
+  setParent: (name: string) => void
   callback: (value: number) => void
 }
 
@@ -16,25 +17,28 @@ export const ITEMS_BY_NAME_QUERY = gql`
   }
 `
 
-export const ParentSelect = ({ defaultName, callback }: ParentSelectType) => {
-  const [search, setSearch] = useState<string | undefined>(defaultName)
+export const ParentSelect = ({
+  name,
+  callback,
+  setParent,
+}: ParentSelectType) => {
   const [flyoutOpen, setFlyoutOpen] = useState(false)
   const [itemsByName, { loading, data }] = useLazyQuery(ITEMS_BY_NAME_QUERY)
 
   useEffect(() => {
     itemsByName({
       variables: {
-        name: search || '',
+        name: name,
       },
     })
-  }, [search, itemsByName])
+  }, [name, itemsByName])
 
   const handleSearch = (value: string) => {
-    setSearch(value)
+    setParent(value)
   }
 
   const handleSelect = (name: string, id: number | undefined) => {
-    setSearch(name)
+    setParent(name)
     callback(id)
     setFlyoutOpen(false)
   }
@@ -42,14 +46,15 @@ export const ParentSelect = ({ defaultName, callback }: ParentSelectType) => {
   return (
     <div className="relative">
       <input
-        className="bg-transparent outline-none border-matcha border-2 rounded-md text-lg focus:border-mint px-2 w-[300px]"
+        className="w-[300px] rounded-md border-2 border-matcha bg-transparent px-2 text-lg outline-none focus:border-mint"
         type="text"
-        value={search}
+        value={name}
         onChange={(event) => handleSearch(event.target.value)}
         onFocus={() => setFlyoutOpen(true)}
+        placeholder="Parent"
       />
       {flyoutOpen && (
-        <div className="absolute z-10 bg-chocolate border-matcha border-2 p-2 rounded-md top-2 right-2 w-[200px]">
+        <div className="absolute top-2 right-2 z-10 w-[200px] rounded-md border-2 border-matcha bg-chocolate p-2">
           {loading && <p className="text-lg">Searching...</p>}
           {data && data.itemsByName.length > 0 ? (
             <div className="flex flex-col justify-start">

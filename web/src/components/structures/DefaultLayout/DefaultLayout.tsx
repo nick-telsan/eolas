@@ -1,30 +1,48 @@
 import { useAuth } from '@redwoodjs/auth'
 import { Link, routes } from '@redwoodjs/router'
 
-import { Navbar } from './Navbar'
-
 type DefaultLayoutProps = {
   children?: React.ReactNode
 }
 
 export const DefaultLayout = ({ children }: DefaultLayoutProps) => {
-  const { logOut } = useAuth()
+  const { logOut, hasRole } = useAuth()
+  const admin = hasRole('admin')
 
   return (
-    <div className="w-full h-full">
-      <header className="w-full h-10 bg-matcha border-b-mint/20 border-b flex justify-between p-4 items-center z-[1000] relative">
+    <div className="h-full w-full">
+      <header className="flex h-10 w-full items-center justify-between border-b border-b-mint/20 bg-matcha p-4">
         <Link
-          className="font-semibold font-overlock text-2xl"
+          className="font-overlock text-2xl font-semibold"
           to={routes.index()}
         >
           eolas
         </Link>
-        <button onClick={logOut}>Log Out</button>
+
+        <div className="flex gap-10">
+          <Link className="font-overlock" to={routes.index()}>
+            Index
+          </Link>
+
+          <Link className="font-overlock" to={routes.view()}>
+            Create
+          </Link>
+
+          <Link className="font-overlock" to={routes.compare()}>
+            Compare
+          </Link>
+
+          {admin && (
+            <Link className="font-overlock" to={routes.admin()}>
+              Compare
+            </Link>
+          )}
+          <button className="font-overlock" onClick={logOut}>
+            Log Out
+          </button>
+        </div>
       </header>
-      <div className="flex w-full top-0 h-full fixed pt-10">
-        <Navbar />
-        <main className="p-4 w-full h-full">{children}</main>
-      </div>
+      <main className="h-full w-full p-4">{children}</main>
     </div>
   )
 }

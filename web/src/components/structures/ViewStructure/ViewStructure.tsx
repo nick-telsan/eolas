@@ -8,6 +8,7 @@ import {
 import { useAuth } from '@redwoodjs/auth'
 import { navigate, routes, useLocation } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+import { toast, Toaster } from '@redwoodjs/web/toast'
 
 import { QUERY as ITEM_QUERY } from 'src/components/cells/ItemsCell'
 import { EditorBlock } from 'src/components/ui/EditorBlock'
@@ -24,7 +25,7 @@ type ViewStructureProps = {
   body?: string
   philosophy?: string
   parentId?: number
-  parentName?: string
+  parentName: string
 }
 
 let filterTimeout: NodeJS.Timeout
@@ -49,6 +50,7 @@ export const ViewStructure = ({
   const [internalBody, setBody] = useState<string>(body)
   const [internalPhilosophy, setPhilosophy] = useState<string>(philosophy)
   const [internalParentId, setParentId] = useState<number | undefined>(parentId)
+  const [internalParentName, setParentName] = useState<string>(parentName)
 
   const [createOrUpdateItem] = useMutation<
     CreateOrUpdateItemMutation,
@@ -56,6 +58,14 @@ export const ViewStructure = ({
   >(CREATE_OR_UPDATE_ITEM, {
     onCompleted: (result) => {
       setInternalId(result.createOrUpdateItem.id)
+    },
+    onError: (error) => {
+      toast.error(error.message)
+
+      if (error.message === 'Child cannot be more than 4 levels deep.') {
+        setParentId(undefined)
+        setParentName('')
+      }
     },
     refetchQueries: [{ query: ITEM_QUERY }],
   })
@@ -118,6 +128,7 @@ export const ViewStructure = ({
 
   return (
     <>
+      <Toaster />
       <div className="mb-2">
         <TextInput
           value={internalName}
@@ -135,7 +146,11 @@ export const ViewStructure = ({
       </div>
 
       <div className="mb-2 flex justify-end">
-        <ParentSelect defaultName={parentName} callback={handleParentChange} />
+        <ParentSelect
+          name={internalParentName}
+          setParent={setParentName}
+          callback={handleParentChange}
+        />
       </div>
 
       <div className="mb-2">
@@ -147,7 +162,7 @@ export const ViewStructure = ({
         />
       </div>
 
-      <div className="flex justify-end w-full">
+      <div className="flex w-full justify-end">
         <button onClick={resetScreen}>Reset</button>
       </div>
     </>
